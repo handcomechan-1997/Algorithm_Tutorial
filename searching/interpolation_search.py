@@ -4,6 +4,12 @@
 插值搜索是二分搜索的改进版本，适用于均匀分布的有序数据。
 它通过线性插值来估计目标元素的位置，从而减少搜索次数。
 时间复杂度：O(log log n) 平均情况，O(n) 最坏情况
+
+学习目标：
+1. 理解插值搜索的数学原理
+2. 掌握线性插值的计算方法
+3. 学会处理边界情况和异常
+4. 理解数据分布对性能的影响
 """
 
 from typing import Any, List, Optional
@@ -18,6 +24,12 @@ class InterpolationSearch(AlgorithmBase):
     - 平均时间复杂度 O(log log n)
     - 最坏情况时间复杂度 O(n)
     - 空间复杂度 O(1)
+    
+    学习要点：
+    1. 理解线性插值的数学原理
+    2. 掌握插值位置的计算公式
+    3. 处理边界情况和除零错误
+    4. 理解数据分布对性能的影响
     """
     
     def __init__(self):
@@ -27,93 +39,26 @@ class InterpolationSearch(AlgorithmBase):
     def search(self, data: List[Any], target: Any) -> Optional[int]:
         """执行插值搜索
         
-        Args:
-            data: 要搜索的有序数据列表
-            target: 要搜索的目标元素
-            
-        Returns:
-            目标元素的位置，如果未找到返回None
-        """
-        try:
-            self.logger.info(f"开始插值搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            n = len(data)
-            if n == 0:
-                self.logger.info("数据列表为空")
-                return None
-            
-            left, right = 0, n - 1
-            
-            # 检查边界条件
-            if target < data[left] or target > data[right]:
-                self.logger.info(f"目标元素 {target} 超出范围 [{data[left]}, {data[right]}]")
-                return None
-            
-            while left <= right and data[left] <= target <= data[right]:
-                # 避免除零错误
-                if data[right] == data[left]:
-                    if data[left] == target:
-                        self.logger.info(f"找到目标元素 {target} 在位置 {left}")
-                        return left
-                    else:
-                        break
-                
-                # 计算插值位置
-                pos = left + int(((target - data[left]) * (right - left)) / (data[right] - data[left]))
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'interpolate',
-                    'left': left,
-                    'right': right,
-                    'pos': pos,
-                    'data_left': data[left],
-                    'data_right': data[right],
-                    'target': target
-                })
-                
-                self.comparison_count += 1
-                if data[pos] == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {pos}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': pos,
-                        'element': target
-                    })
-                    return pos
-                
-                self.comparison_count += 1
-                if data[pos] < target:
-                    left = pos + 1
-                    self.add_step({
-                        'type': 'move_right',
-                        'new_left': left,
-                        'new_right': right
-                    })
-                else:
-                    right = pos - 1
-                    self.add_step({
-                        'type': 'move_left',
-                        'new_left': left,
-                        'new_right': right
-                    })
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"插值搜索失败: {e}")
-            return None
-    
-    def search_with_bounds_check(self, data: List[Any], target: Any) -> Optional[int]:
-        """带边界检查的插值搜索
+        TODO: 请实现插值搜索算法
+        
+        实现思路：
+        1. 检查边界条件（目标是否在数据范围内）
+        2. 使用插值公式计算估计位置：
+           pos = left + ((target - data[left]) * (right - left)) / (data[right] - data[left])
+        3. 比较 data[pos] 与 target
+        4. 根据比较结果更新搜索范围
+        5. 重复直到找到目标或确定不存在
+        
+        关键点：
+        - 插值公式基于线性插值原理
+        - 需要处理除零错误（data[right] == data[left]）
+        - 需要检查边界条件避免越界
+        
+        提示：
+        - 使用 while 循环控制搜索过程
+        - 使用 int() 将插值结果转换为整数
+        - 处理除零错误和边界条件
+        - 记录搜索步骤和比较次数
         
         Args:
             data: 要搜索的有序数据列表
@@ -122,89 +67,60 @@ class InterpolationSearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始带边界检查的插值搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
+        # TODO: 在这里实现插值搜索算法
+        pass
+    
+    def search_with_bounds_check(self, data: List[Any], target: Any) -> Optional[int]:
+        """带边界检查的插值搜索
+        
+        TODO: 请实现带边界检查的插值搜索算法
+        
+        实现思路：
+        1. 在每次迭代中检查边界条件
+        2. 确保插值位置在有效范围内
+        3. 处理除零错误和边界情况
+        4. 提供更稳定的搜索过程
+        
+        改进点：
+        - 更严格的边界检查
+        - 更好的异常处理
+        - 更稳定的性能表现
+        
+        提示：
+        - 在每次计算插值位置前检查边界
+        - 使用 max() 和 min() 确保位置在范围内
+        - 处理各种边界情况
+        
+        Args:
+            data: 要搜索的有序数据列表
+            target: 要搜索的目标元素
             
-            n = len(data)
-            if n == 0:
-                self.logger.info("数据列表为空")
-                return None
-            
-            left, right = 0, n - 1
-            
-            while left <= right:
-                # 边界检查
-                if target < data[left] or target > data[right]:
-                    self.logger.info(f"目标元素 {target} 超出当前范围 [{data[left]}, {data[right]}]")
-                    break
-                
-                # 避免除零错误
-                if data[right] == data[left]:
-                    if data[left] == target:
-                        self.logger.info(f"找到目标元素 {target} 在位置 {left}")
-                        return left
-                    else:
-                        break
-                
-                # 计算插值位置
-                pos = left + int(((target - data[left]) * (right - left)) / (data[right] - data[left]))
-                
-                # 确保位置在有效范围内
-                pos = max(left, min(right, pos))
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'interpolate_with_bounds',
-                    'left': left,
-                    'right': right,
-                    'pos': pos,
-                    'data_left': data[left],
-                    'data_right': data[right],
-                    'target': target
-                })
-                
-                self.comparison_count += 1
-                if data[pos] == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {pos}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': pos,
-                        'element': target
-                    })
-                    return pos
-                
-                self.comparison_count += 1
-                if data[pos] < target:
-                    left = pos + 1
-                    self.add_step({
-                        'type': 'move_right',
-                        'new_left': left,
-                        'new_right': right
-                    })
-                else:
-                    right = pos - 1
-                    self.add_step({
-                        'type': 'move_left',
-                        'new_left': left,
-                        'new_right': right
-                    })
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"带边界检查的插值搜索失败: {e}")
-            return None
+        Returns:
+            目标元素的位置，如果未找到返回None
+        """
+        # TODO: 在这里实现带边界检查的插值搜索算法
+        pass
     
     def is_uniformly_distributed(self, data: List[Any], tolerance: float = 0.1) -> bool:
         """检查数据是否均匀分布
+        
+        TODO: 请实现数据分布检查算法
+        
+        实现思路：
+        1. 计算相邻元素的差值
+        2. 计算平均差值
+        3. 检查每个差值是否接近平均值
+        4. 根据容差判断是否均匀分布
+        
+        应用场景：
+        - 在搜索前检查数据分布
+        - 决定是否使用插值搜索
+        - 优化搜索策略选择
+        
+        提示：
+        - 使用列表存储相邻元素的差值
+        - 计算平均差值并检查偏差
+        - 使用容差参数控制判断标准
         
         Args:
             data: 要检查的数据列表
@@ -213,31 +129,8 @@ class InterpolationSearch(AlgorithmBase):
         Returns:
             如果数据均匀分布返回True，否则返回False
         """
-        if len(data) < 3:
-            return True
-        
-        try:
-            # 计算相邻元素的差值
-            differences = []
-            for i in range(1, len(data)):
-                diff = abs(data[i] - data[i-1])
-                differences.append(diff)
-            
-            if not differences:
-                return True
-            
-            # 计算平均差值
-            avg_diff = sum(differences) / len(differences)
-            
-            # 检查差值是否接近平均值
-            for diff in differences:
-                if abs(diff - avg_diff) / avg_diff > tolerance:
-                    return False
-            
-            return True
-            
-        except Exception:
-            return False
+        # TODO: 在这里实现数据分布检查算法
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息"""

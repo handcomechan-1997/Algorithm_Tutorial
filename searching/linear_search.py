@@ -3,6 +3,12 @@
 
 线性搜索是最基本的搜索算法，逐个检查每个元素直到找到目标。
 时间复杂度：O(n)，空间复杂度：O(1)
+
+学习目标：
+1. 理解线性搜索的基本思想
+2. 掌握逐个比较的搜索方法
+3. 学会处理边界情况和异常
+4. 理解不同搜索变体的实现
 """
 
 from typing import Any, List, Optional, Callable
@@ -17,6 +23,12 @@ class LinearSearch(AlgorithmBase):
     - 时间复杂度 O(n)
     - 空间复杂度 O(1)
     - 简单易懂
+    
+    学习要点：
+    1. 逐个遍历数组元素
+    2. 比较当前元素与目标元素
+    3. 记录搜索步骤用于可视化
+    4. 统计比较次数和操作次数
     """
     
     def __init__(self):
@@ -26,6 +38,21 @@ class LinearSearch(AlgorithmBase):
     def search(self, data: List[Any], target: Any) -> Optional[int]:
         """执行基本线性搜索
         
+        TODO: 请实现基本的线性搜索算法
+        
+        实现思路：
+        1. 遍历数组中的每个元素
+        2. 比较当前元素与目标元素
+        3. 如果找到目标，返回其位置
+        4. 如果遍历完整个数组都没找到，返回None
+        
+        提示：
+        - 使用 for 循环和 enumerate() 来遍历数组
+        - 记录比较次数：self.comparison_count += 1
+        - 记录操作次数：self.operation_count += 1
+        - 使用 self.add_step() 记录搜索步骤
+        - 使用 self.logger.info() 记录日志
+        
         Args:
             data: 要搜索的数据列表
             target: 要搜索的目标元素
@@ -33,45 +60,23 @@ class LinearSearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始线性搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            for i, element in enumerate(data):
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'compare',
-                    'index': i,
-                    'current_element': element,
-                    'target': target
-                })
-                
-                if element == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {i}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': i,
-                        'element': target
-                    })
-                    return i
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"线性搜索失败: {e}")
-            return None
+        # TODO: 在这里实现线性搜索算法
+        pass
     
     def search_with_condition(self, data: List[Any], condition: Callable[[Any], bool]) -> Optional[int]:
         """使用自定义条件进行搜索
+        
+        TODO: 请实现条件线性搜索算法
+        
+        实现思路：
+        1. 遍历数组中的每个元素
+        2. 使用条件函数检查当前元素
+        3. 如果条件满足，返回其位置
+        4. 如果遍历完整个数组都没找到，返回None
+        
+        提示：
+        - 使用 condition(element) 来检查条件
+        - 记录搜索步骤时使用 'check_condition' 类型
         
         Args:
             data: 要搜索的数据列表
@@ -80,43 +85,23 @@ class LinearSearch(AlgorithmBase):
         Returns:
             满足条件的第一个元素位置，如果未找到返回None
         """
-        try:
-            self.logger.info("开始条件线性搜索")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            for i, element in enumerate(data):
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'check_condition',
-                    'index': i,
-                    'current_element': element
-                })
-                
-                if condition(element):
-                    self.logger.info(f"找到满足条件的元素在位置 {i}: {element}")
-                    self.add_step({
-                        'type': 'condition_met',
-                        'position': i,
-                        'element': element
-                    })
-                    return i
-            
-            self.logger.info("未找到满足条件的元素")
-            self.add_step({
-                'type': 'condition_not_met'
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"条件线性搜索失败: {e}")
-            return None
+        # TODO: 在这里实现条件线性搜索算法
+        pass
     
     def search_all_occurrences(self, data: List[Any], target: Any) -> List[int]:
         """搜索目标元素的所有出现位置
+        
+        TODO: 请实现搜索所有出现位置的算法
+        
+        实现思路：
+        1. 遍历数组中的每个元素
+        2. 如果当前元素等于目标元素，记录其位置
+        3. 继续遍历直到数组结束
+        4. 返回所有找到的位置列表
+        
+        提示：
+        - 使用列表来收集所有出现的位置
+        - 记录搜索步骤时包含已找到的数量
         
         Args:
             data: 要搜索的数据列表
@@ -125,50 +110,28 @@ class LinearSearch(AlgorithmBase):
         Returns:
             目标元素所有出现位置的列表
         """
-        try:
-            self.logger.info(f"开始搜索所有出现位置，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            occurrences = []
-            
-            for i, element in enumerate(data):
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'compare',
-                    'index': i,
-                    'current_element': element,
-                    'target': target,
-                    'found_count': len(occurrences)
-                })
-                
-                if element == target:
-                    occurrences.append(i)
-                    self.add_step({
-                        'type': 'found_occurrence',
-                        'position': i,
-                        'total_found': len(occurrences)
-                    })
-            
-            self.logger.info(f"找到 {len(occurrences)} 个目标元素 {target}")
-            self.add_step({
-                'type': 'search_complete',
-                'occurrences': occurrences,
-                'count': len(occurrences)
-            })
-            return occurrences
-            
-        except Exception as e:
-            self.logger.error(f"搜索所有出现位置失败: {e}")
-            return []
+        # TODO: 在这里实现搜索所有出现位置的算法
+        pass
     
     def search_sentinel(self, data: List[Any], target: Any) -> Optional[int]:
         """哨兵线性搜索（优化版本）
         
-        通过添加哨兵元素来减少比较次数
+        TODO: 请实现哨兵线性搜索算法
+        
+        实现思路：
+        1. 在数组末尾添加目标元素作为哨兵
+        2. 遍历数组直到找到目标元素
+        3. 检查找到的位置是否在原始数组范围内
+        4. 移除哨兵元素
+        
+        优化原理：
+        - 通过添加哨兵元素，减少循环中的比较次数
+        - 每次循环只需要检查元素是否等于目标，不需要检查边界
+        
+        提示：
+        - 使用 data.append(target) 添加哨兵
+        - 使用 data.pop() 移除哨兵
+        - 记录搜索步骤时使用 'sentinel_compare' 类型
         
         Args:
             data: 要搜索的数据列表
@@ -177,51 +140,8 @@ class LinearSearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始哨兵线性搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            # 添加哨兵元素
-            original_length = len(data)
-            data.append(target)
-            
-            i = 0
-            while data[i] != target:
-                i += 1
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'sentinel_compare',
-                    'index': i,
-                    'current_element': data[i],
-                    'target': target
-                })
-            
-            # 移除哨兵元素
-            data.pop()
-            
-            if i < original_length:
-                self.logger.info(f"找到目标元素 {target} 在位置 {i}")
-                self.add_step({
-                    'type': 'found',
-                    'position': i,
-                    'element': target
-                })
-                return i
-            else:
-                self.logger.info(f"未找到目标元素 {target}")
-                self.add_step({
-                    'type': 'not_found',
-                    'target': target
-                })
-                return None
-                
-        except Exception as e:
-            self.logger.error(f"哨兵线性搜索失败: {e}")
-            return None
+        # TODO: 在这里实现哨兵线性搜索算法
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息"""

@@ -3,6 +3,12 @@
 
 包含深度优先搜索(DFS)和广度优先搜索(BFS)算法。
 这些算法用于遍历图结构，寻找路径或连通分量。
+
+学习目标：
+1. 理解图搜索的基本概念
+2. 掌握深度优先搜索的实现
+3. 掌握广度优先搜索的实现
+4. 学会处理路径查找问题
 """
 
 from typing import Any, List, Optional, Set, Dict, Tuple
@@ -18,6 +24,12 @@ class DepthFirstSearch(AlgorithmBase):
     - 优先探索深层节点
     - 时间复杂度 O(V + E)
     - 空间复杂度 O(V)
+    
+    学习要点：
+    1. 理解深度优先的搜索策略
+    2. 掌握递归或栈的实现方式
+    3. 学会记录访问状态和路径
+    4. 理解回溯的概念
     """
     
     def __init__(self):
@@ -27,6 +39,28 @@ class DepthFirstSearch(AlgorithmBase):
     def search(self, graph: Graph, start_vertex: Any, target_vertex: Any = None) -> List[Any]:
         """执行深度优先搜索
         
+        TODO: 请实现深度优先搜索算法
+        
+        实现思路：
+        1. 初始化访问集合和结果列表
+        2. 定义递归函数 dfs_recursive(vertex)：
+           - 如果顶点已访问，直接返回
+           - 将顶点标记为已访问，加入结果列表
+           - 如果找到目标顶点，可以提前结束
+           - 递归访问所有未访问的邻居
+        3. 从起始顶点开始递归搜索
+        
+        关键点：
+        - 使用 visited 集合记录已访问的顶点
+        - 使用递归或栈实现深度优先
+        - 记录搜索步骤和访问顺序
+        
+        提示：
+        - 使用 set() 创建访问集合
+        - 使用递归函数实现深度优先
+        - 使用 graph.get_neighbors(vertex) 获取邻居
+        - 记录搜索步骤和访问状态
+        
         Args:
             graph: 要搜索的图
             start_vertex: 起始顶点
@@ -35,63 +69,30 @@ class DepthFirstSearch(AlgorithmBase):
         Returns:
             访问顶点的顺序列表
         """
-        try:
-            self.logger.info(f"开始深度优先搜索，起始顶点: {start_vertex}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            visited = set()
-            result = []
-            
-            def dfs_recursive(vertex: Any):
-                if vertex in visited:
-                    return
-                
-                visited.add(vertex)
-                result.append(vertex)
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'visit',
-                    'vertex': vertex,
-                    'visited_count': len(visited),
-                    'path': result.copy()
-                })
-                
-                # 如果找到目标顶点，可以提前结束
-                if target_vertex is not None and vertex == target_vertex:
-                    self.add_step({
-                        'type': 'target_found',
-                        'vertex': vertex,
-                        'path': result.copy()
-                    })
-                    return
-                
-                # 递归访问邻居
-                neighbors = graph.get_neighbors(vertex)
-                for neighbor, weight in neighbors:
-                    self.comparison_count += 1
-                    if neighbor not in visited:
-                        self.add_step({
-                            'type': 'explore',
-                            'from_vertex': vertex,
-                            'to_vertex': neighbor,
-                            'weight': weight
-                        })
-                        dfs_recursive(neighbor)
-            
-            dfs_recursive(start_vertex)
-            
-            self.logger.info(f"深度优先搜索完成，访问了 {len(result)} 个顶点")
-            return result
-            
-        except Exception as e:
-            self.logger.error(f"深度优先搜索失败: {e}")
-            return []
+        # TODO: 在这里实现深度优先搜索算法
+        pass
     
     def find_path(self, graph: Graph, start_vertex: Any, target_vertex: Any) -> Optional[List[Any]]:
         """查找从起始顶点到目标顶点的路径
+        
+        TODO: 请实现路径查找算法
+        
+        实现思路：
+        1. 使用深度优先搜索查找路径
+        2. 记录路径信息（可以使用字典或列表）
+        3. 当找到目标顶点时，重建路径
+        4. 如果没找到路径，返回 None
+        
+        关键点：
+        - 需要记录路径信息以便重建
+        - 可以使用回溯或路径记录
+        - 处理路径不存在的情况
+        
+        提示：
+        - 使用字典记录父节点关系
+        - 使用列表记录当前路径
+        - 当找到目标时重建完整路径
+        - 记录搜索步骤和路径信息
         
         Args:
             graph: 要搜索的图
@@ -101,64 +102,8 @@ class DepthFirstSearch(AlgorithmBase):
         Returns:
             路径列表，如果不存在路径返回None
         """
-        try:
-            self.logger.info(f"开始查找路径: {start_vertex} -> {target_vertex}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            visited = set()
-            path = []
-            parent = {}
-            
-            def dfs_path(vertex: Any):
-                if vertex in visited:
-                    return False
-                
-                visited.add(vertex)
-                path.append(vertex)
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'visit',
-                    'vertex': vertex,
-                    'current_path': path.copy()
-                })
-                
-                if vertex == target_vertex:
-                    self.add_step({
-                        'type': 'path_found',
-                        'path': path.copy()
-                    })
-                    return True
-                
-                neighbors = graph.get_neighbors(vertex)
-                for neighbor, weight in neighbors:
-                    self.comparison_count += 1
-                    if neighbor not in visited:
-                        parent[neighbor] = vertex
-                        self.add_step({
-                            'type': 'explore',
-                            'from_vertex': vertex,
-                            'to_vertex': neighbor,
-                            'weight': weight
-                        })
-                        if dfs_path(neighbor):
-                            return True
-                
-                path.pop()
-                return False
-            
-            if dfs_path(start_vertex):
-                self.logger.info(f"找到路径: {' -> '.join(map(str, path))}")
-                return path
-            else:
-                self.logger.info(f"未找到从 {start_vertex} 到 {target_vertex} 的路径")
-                return None
-                
-        except Exception as e:
-            self.logger.error(f"查找路径失败: {e}")
-            return None
+        # TODO: 在这里实现路径查找算法
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息"""
@@ -219,6 +164,12 @@ class BreadthFirstSearch(AlgorithmBase):
     - 优先探索近邻节点
     - 时间复杂度 O(V + E)
     - 空间复杂度 O(V)
+    
+    学习要点：
+    1. 理解广度优先的搜索策略
+    2. 掌握队列的实现方式
+    3. 学会记录访问状态和层次
+    4. 理解最短路径的概念
     """
     
     def __init__(self):
@@ -228,6 +179,29 @@ class BreadthFirstSearch(AlgorithmBase):
     def search(self, graph: Graph, start_vertex: Any, target_vertex: Any = None) -> List[Any]:
         """执行广度优先搜索
         
+        TODO: 请实现广度优先搜索算法
+        
+        实现思路：
+        1. 初始化访问集合、结果列表和队列
+        2. 将起始顶点加入队列和访问集合
+        3. 当队列不为空时：
+           - 从队列取出一个顶点
+           - 将顶点加入结果列表
+           - 如果找到目标顶点，可以提前结束
+           - 将所有未访问的邻居加入队列
+        4. 返回访问顺序列表
+        
+        关键点：
+        - 使用队列实现广度优先
+        - 使用 visited 集合记录已访问的顶点
+        - 记录搜索步骤和访问顺序
+        
+        提示：
+        - 使用列表作为队列（append 入队，pop(0) 出队）
+        - 使用 set() 创建访问集合
+        - 使用 graph.get_neighbors(vertex) 获取邻居
+        - 记录搜索步骤和队列状态
+        
         Args:
             graph: 要搜索的图
             start_vertex: 起始顶点
@@ -236,63 +210,30 @@ class BreadthFirstSearch(AlgorithmBase):
         Returns:
             访问顶点的顺序列表
         """
-        try:
-            self.logger.info(f"开始广度优先搜索，起始顶点: {start_vertex}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            visited = set()
-            result = []
-            queue = [start_vertex]
-            visited.add(start_vertex)
-            
-            while queue:
-                vertex = queue.pop(0)
-                result.append(vertex)
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'visit',
-                    'vertex': vertex,
-                    'queue_size': len(queue),
-                    'visited_count': len(visited),
-                    'path': result.copy()
-                })
-                
-                # 如果找到目标顶点，可以提前结束
-                if target_vertex is not None and vertex == target_vertex:
-                    self.add_step({
-                        'type': 'target_found',
-                        'vertex': vertex,
-                        'path': result.copy()
-                    })
-                    break
-                
-                # 访问邻居
-                neighbors = graph.get_neighbors(vertex)
-                for neighbor, weight in neighbors:
-                    self.comparison_count += 1
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-                        self.add_step({
-                            'type': 'explore',
-                            'from_vertex': vertex,
-                            'to_vertex': neighbor,
-                            'weight': weight,
-                            'queue_size': len(queue)
-                        })
-            
-            self.logger.info(f"广度优先搜索完成，访问了 {len(result)} 个顶点")
-            return result
-            
-        except Exception as e:
-            self.logger.error(f"广度优先搜索失败: {e}")
-            return []
+        # TODO: 在这里实现广度优先搜索算法
+        pass
     
     def find_shortest_path(self, graph: Graph, start_vertex: Any, target_vertex: Any) -> Optional[List[Any]]:
         """查找从起始顶点到目标顶点的最短路径
+        
+        TODO: 请实现最短路径查找算法
+        
+        实现思路：
+        1. 使用广度优先搜索查找最短路径
+        2. 记录父节点关系以便重建路径
+        3. 当找到目标顶点时，重建路径
+        4. 如果没找到路径，返回 None
+        
+        关键点：
+        - 广度优先搜索保证找到的是最短路径
+        - 需要记录父节点关系
+        - 处理路径不存在的情况
+        
+        提示：
+        - 使用字典记录父节点关系
+        - 使用队列存储 (vertex, distance) 元组
+        - 当找到目标时重建完整路径
+        - 记录搜索步骤和距离信息
         
         Args:
             graph: 要搜索的图
@@ -302,68 +243,8 @@ class BreadthFirstSearch(AlgorithmBase):
         Returns:
             最短路径列表，如果不存在路径返回None
         """
-        try:
-            self.logger.info(f"开始查找最短路径: {start_vertex} -> {target_vertex}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            visited = set()
-            parent = {}
-            queue = [(start_vertex, 0)]  # (vertex, distance)
-            visited.add(start_vertex)
-            
-            while queue:
-                vertex, distance = queue.pop(0)
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'visit',
-                    'vertex': vertex,
-                    'distance': distance,
-                    'queue_size': len(queue)
-                })
-                
-                if vertex == target_vertex:
-                    # 重建路径
-                    path = []
-                    current = vertex
-                    while current is not None:
-                        path.append(current)
-                        current = parent.get(current)
-                    path.reverse()
-                    
-                    self.add_step({
-                        'type': 'shortest_path_found',
-                        'path': path,
-                        'distance': distance
-                    })
-                    
-                    self.logger.info(f"找到最短路径: {' -> '.join(map(str, path))}，距离: {distance}")
-                    return path
-                
-                neighbors = graph.get_neighbors(vertex)
-                for neighbor, weight in neighbors:
-                    self.comparison_count += 1
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        parent[neighbor] = vertex
-                        queue.append((neighbor, distance + weight))
-                        
-                        self.add_step({
-                            'type': 'explore',
-                            'from_vertex': vertex,
-                            'to_vertex': neighbor,
-                            'weight': weight,
-                            'new_distance': distance + weight
-                        })
-            
-            self.logger.info(f"未找到从 {start_vertex} 到 {target_vertex} 的路径")
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"查找最短路径失败: {e}")
-            return None
+        # TODO: 在这里实现最短路径查找算法
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息"""

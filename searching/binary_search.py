@@ -3,6 +3,12 @@
 
 二分搜索是一种高效的搜索算法，要求数据必须是有序的。
 时间复杂度：O(log n)，空间复杂度：O(1)
+
+学习目标：
+1. 理解二分搜索的分治思想
+2. 掌握有序数组的搜索技巧
+3. 学会处理边界情况和重复元素
+4. 理解不同二分搜索变体的实现
 """
 
 from typing import Any, List, Optional, Tuple
@@ -17,6 +23,12 @@ class BinarySearch(AlgorithmBase):
     - 时间复杂度 O(log n)
     - 空间复杂度 O(1)
     - 非常高效
+    
+    学习要点：
+    1. 利用数据的有序性进行分治搜索
+    2. 通过比较中间元素来缩小搜索范围
+    3. 处理重复元素的特殊情况
+    4. 理解搜索范围的边界条件
     """
     
     def __init__(self):
@@ -26,6 +38,24 @@ class BinarySearch(AlgorithmBase):
     def search(self, data: List[Any], target: Any) -> Optional[int]:
         """执行二分搜索
         
+        TODO: 请实现基本的二分搜索算法
+        
+        实现思路：
+        1. 初始化左右边界（left=0, right=len(data)-1）
+        2. 当 left <= right 时继续搜索：
+           - 计算中间位置 mid = (left + right) // 2
+           - 比较 data[mid] 与 target
+           - 如果相等，返回 mid
+           - 如果 data[mid] < target，更新 left = mid + 1
+           - 如果 data[mid] > target，更新 right = mid - 1
+        3. 如果没找到，返回 None
+        
+        提示：
+        - 使用 while 循环控制搜索过程
+        - 记录比较次数和操作次数
+        - 使用 self.add_step() 记录搜索步骤
+        - 注意边界条件的处理
+        
         Args:
             data: 要搜索的有序数据列表
             target: 要搜索的目标元素
@@ -33,64 +63,28 @@ class BinarySearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始二分搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            left, right = 0, len(data) - 1
-            
-            while left <= right:
-                mid = (left + right) // 2
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'compare',
-                    'left': left,
-                    'right': right,
-                    'mid': mid,
-                    'current_element': data[mid],
-                    'target': target
-                })
-                
-                if data[mid] == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {mid}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': mid,
-                        'element': target
-                    })
-                    return mid
-                elif data[mid] < target:
-                    left = mid + 1
-                    self.add_step({
-                        'type': 'move_right',
-                        'new_left': left,
-                        'new_right': right
-                    })
-                else:
-                    right = mid - 1
-                    self.add_step({
-                        'type': 'move_left',
-                        'new_left': left,
-                        'new_right': right
-                    })
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"二分搜索失败: {e}")
-            return None
+        # TODO: 在这里实现二分搜索算法
+        pass
     
     def search_first_occurrence(self, data: List[Any], target: Any) -> Optional[int]:
         """搜索目标元素的第一次出现位置
+        
+        TODO: 请实现搜索第一次出现位置的算法
+        
+        实现思路：
+        1. 使用二分搜索找到目标元素
+        2. 找到后，继续向左搜索，看是否还有更早的出现
+        3. 记录找到的位置，但继续缩小搜索范围
+        4. 最终返回第一次出现的位置
+        
+        关键点：
+        - 当找到目标元素时，不要立即返回
+        - 继续在左半部分搜索，看是否有更早的出现
+        - 使用 result 变量记录当前找到的位置
+        
+        提示：
+        - 当 data[mid] == target 时，更新 result = mid
+        - 然后继续搜索左半部分：right = mid - 1
         
         Args:
             data: 要搜索的有序数据列表
@@ -99,66 +93,28 @@ class BinarySearch(AlgorithmBase):
         Returns:
             目标元素第一次出现的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始二分搜索第一次出现位置，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            left, right = 0, len(data) - 1
-            result = None
-            
-            while left <= right:
-                mid = (left + right) // 2
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'compare',
-                    'left': left,
-                    'right': right,
-                    'mid': mid,
-                    'current_element': data[mid],
-                    'target': target
-                })
-                
-                if data[mid] == target:
-                    result = mid
-                    right = mid - 1  # 继续向左搜索
-                    self.add_step({
-                        'type': 'found_continue_left',
-                        'position': mid,
-                        'new_left': left,
-                        'new_right': right
-                    })
-                elif data[mid] < target:
-                    left = mid + 1
-                    self.add_step({
-                        'type': 'move_right',
-                        'new_left': left,
-                        'new_right': right
-                    })
-                else:
-                    right = mid - 1
-                    self.add_step({
-                        'type': 'move_left',
-                        'new_left': left,
-                        'new_right': right
-                    })
-            
-            if result is not None:
-                self.logger.info(f"找到目标元素 {target} 第一次出现在位置 {result}")
-            else:
-                self.logger.info(f"未找到目标元素 {target}")
-            
-            return result
-            
-        except Exception as e:
-            self.logger.error(f"二分搜索第一次出现位置失败: {e}")
-            return None
+        # TODO: 在这里实现搜索第一次出现位置的算法
+        pass
     
     def search_last_occurrence(self, data: List[Any], target: Any) -> Optional[int]:
         """搜索目标元素的最后一次出现位置
+        
+        TODO: 请实现搜索最后一次出现位置的算法
+        
+        实现思路：
+        1. 使用二分搜索找到目标元素
+        2. 找到后，继续向右搜索，看是否还有更晚的出现
+        3. 记录找到的位置，但继续缩小搜索范围
+        4. 最终返回最后一次出现的位置
+        
+        关键点：
+        - 当找到目标元素时，不要立即返回
+        - 继续在右半部分搜索，看是否有更晚的出现
+        - 使用 result 变量记录当前找到的位置
+        
+        提示：
+        - 当 data[mid] == target 时，更新 result = mid
+        - 然后继续搜索右半部分：left = mid + 1
         
         Args:
             data: 要搜索的有序数据列表
@@ -167,63 +123,8 @@ class BinarySearch(AlgorithmBase):
         Returns:
             目标元素最后一次出现的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始二分搜索最后一次出现位置，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            left, right = 0, len(data) - 1
-            result = None
-            
-            while left <= right:
-                mid = (left + right) // 2
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录搜索步骤
-                self.add_step({
-                    'type': 'compare',
-                    'left': left,
-                    'right': right,
-                    'mid': mid,
-                    'current_element': data[mid],
-                    'target': target
-                })
-                
-                if data[mid] == target:
-                    result = mid
-                    left = mid + 1  # 继续向右搜索
-                    self.add_step({
-                        'type': 'found_continue_right',
-                        'position': mid,
-                        'new_left': left,
-                        'new_right': right
-                    })
-                elif data[mid] < target:
-                    left = mid + 1
-                    self.add_step({
-                        'type': 'move_right',
-                        'new_left': left,
-                        'new_right': right
-                    })
-                else:
-                    right = mid - 1
-                    self.add_step({
-                        'type': 'move_left',
-                        'new_left': left,
-                        'new_right': right
-                    })
-            
-            if result is not None:
-                self.logger.info(f"找到目标元素 {target} 最后一次出现在位置 {result}")
-            else:
-                self.logger.info(f"未找到目标元素 {target}")
-            
-            return result
-            
-        except Exception as e:
-            self.logger.error(f"二分搜索最后一次出现位置失败: {e}")
-            return None
+        # TODO: 在这里实现搜索最后一次出现位置的算法
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息

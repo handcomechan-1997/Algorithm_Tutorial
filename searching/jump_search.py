@@ -4,6 +4,12 @@
 跳跃搜索是一种搜索算法，适用于有序数组。
 它通过跳跃固定步长来减少比较次数，然后使用线性搜索在较小的范围内查找。
 时间复杂度：O(√n)，空间复杂度：O(1)
+
+学习目标：
+1. 理解跳跃搜索的优化思想
+2. 掌握步长计算和跳跃策略
+3. 学会结合跳跃和线性搜索
+4. 理解不同步长对性能的影响
 """
 
 import math
@@ -19,6 +25,12 @@ class JumpSearch(AlgorithmBase):
     - 时间复杂度 O(√n)
     - 空间复杂度 O(1)
     - 比线性搜索更高效，比二分搜索简单
+    
+    学习要点：
+    1. 计算最优跳跃步长（通常为 √n）
+    2. 通过跳跃快速定位目标范围
+    3. 在较小范围内进行线性搜索
+    4. 理解步长选择对性能的影响
     """
     
     def __init__(self):
@@ -28,6 +40,28 @@ class JumpSearch(AlgorithmBase):
     def search(self, data: List[Any], target: Any) -> Optional[int]:
         """执行跳跃搜索
         
+        TODO: 请实现跳跃搜索算法
+        
+        实现思路：
+        1. 计算跳跃步长：step = √n
+        2. 跳跃阶段：从索引0开始，每次跳跃step个位置
+           - 检查跳跃位置的值是否小于目标
+           - 如果是，继续跳跃；如果否，停止跳跃
+        3. 线性搜索阶段：在跳跃范围内进行线性搜索
+           - 从上一个跳跃位置开始
+           - 逐个检查元素直到找到目标或超出范围
+        
+        关键点：
+        - 跳跃步长通常选择 √n，这是理论最优值
+        - 跳跃阶段用于快速缩小搜索范围
+        - 线性搜索阶段在较小范围内进行精确查找
+        
+        提示：
+        - 使用 math.sqrt(n) 计算步长
+        - 使用 while 循环进行跳跃
+        - 使用 for 循环或 while 循环进行线性搜索
+        - 记录跳跃和搜索步骤
+        
         Args:
             data: 要搜索的有序数据列表
             target: 要搜索的目标元素
@@ -35,79 +69,27 @@ class JumpSearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始跳跃搜索，目标元素: {target}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            n = len(data)
-            if n == 0:
-                self.logger.info("数据列表为空")
-                return None
-            
-            # 计算跳跃步长
-            step = int(math.sqrt(n))
-            self.logger.info(f"跳跃步长: {step}")
-            
-            # 跳跃阶段
-            prev = 0
-            while prev < n and data[min(step, n) - 1] < target:
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录跳跃步骤
-                self.add_step({
-                    'type': 'jump',
-                    'from_index': prev,
-                    'to_index': min(step, n) - 1,
-                    'current_element': data[min(step, n) - 1],
-                    'target': target,
-                    'step': step
-                })
-                
-                prev = step
-                step += int(math.sqrt(n))
-                
-                # 如果超出数组范围
-                if prev >= n:
-                    break
-            
-            # 线性搜索阶段
-            while prev < min(step, n):
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录线性搜索步骤
-                self.add_step({
-                    'type': 'linear_search',
-                    'index': prev,
-                    'current_element': data[prev],
-                    'target': target
-                })
-                
-                if data[prev] == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {prev}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': prev,
-                        'element': target
-                    })
-                    return prev
-                prev += 1
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"跳跃搜索失败: {e}")
-            return None
+        # TODO: 在这里实现跳跃搜索算法
+        pass
     
     def search_with_custom_step(self, data: List[Any], target: Any, step_size: int) -> Optional[int]:
         """使用自定义步长进行跳跃搜索
+        
+        TODO: 请实现自定义步长的跳跃搜索算法
+        
+        实现思路：
+        1. 使用指定的步长进行跳跃
+        2. 跳跃阶段：每次跳跃 step_size 个位置
+        3. 线性搜索阶段：在跳跃范围内进行线性搜索
+        
+        应用场景：
+        - 当数据分布不均匀时，可能需要调整步长
+        - 当内存访问模式有特殊要求时
+        - 当需要平衡跳跃开销和搜索效率时
+        
+        提示：
+        - 与基本跳跃搜索类似，但使用自定义步长
+        - 注意处理步长可能不是最优的情况
         
         Args:
             data: 要搜索的有序数据列表
@@ -117,77 +99,22 @@ class JumpSearch(AlgorithmBase):
         Returns:
             目标元素的位置，如果未找到返回None
         """
-        try:
-            self.logger.info(f"开始自定义步长跳跃搜索，目标元素: {target}，步长: {step_size}")
-            self.operation_count = 0
-            self.comparison_count = 0
-            
-            n = len(data)
-            if n == 0:
-                self.logger.info("数据列表为空")
-                return None
-            
-            # 跳跃阶段
-            prev = 0
-            while prev < n and data[min(prev + step_size, n) - 1] < target:
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录跳跃步骤
-                self.add_step({
-                    'type': 'custom_jump',
-                    'from_index': prev,
-                    'to_index': min(prev + step_size, n) - 1,
-                    'current_element': data[min(prev + step_size, n) - 1],
-                    'target': target,
-                    'step_size': step_size
-                })
-                
-                prev += step_size
-                
-                # 如果超出数组范围
-                if prev >= n:
-                    break
-            
-            # 线性搜索阶段
-            end_index = min(prev, n)
-            for i in range(prev - step_size, end_index):
-                if i < 0:
-                    continue
-                    
-                self.comparison_count += 1
-                self.operation_count += 1
-                
-                # 记录线性搜索步骤
-                self.add_step({
-                    'type': 'custom_linear_search',
-                    'index': i,
-                    'current_element': data[i],
-                    'target': target
-                })
-                
-                if data[i] == target:
-                    self.logger.info(f"找到目标元素 {target} 在位置 {i}")
-                    self.add_step({
-                        'type': 'found',
-                        'position': i,
-                        'element': target
-                    })
-                    return i
-            
-            self.logger.info(f"未找到目标元素 {target}")
-            self.add_step({
-                'type': 'not_found',
-                'target': target
-            })
-            return None
-            
-        except Exception as e:
-            self.logger.error(f"自定义步长跳跃搜索失败: {e}")
-            return None
+        # TODO: 在这里实现自定义步长的跳跃搜索算法
+        pass
     
     def find_optimal_step_size(self, data_length: int) -> int:
         """计算最优跳跃步长
+        
+        TODO: 请实现最优步长计算
+        
+        理论分析：
+        - 跳跃搜索的时间复杂度为 O(√n)
+        - 最优步长通常为 √n
+        - 但实际最优值可能因数据分布而异
+        
+        提示：
+        - 使用数学公式计算理论最优步长
+        - 可以考虑数据分布特征进行调整
         
         Args:
             data_length: 数据长度
@@ -195,7 +122,8 @@ class JumpSearch(AlgorithmBase):
         Returns:
             最优跳跃步长
         """
-        return int(math.sqrt(data_length))
+        # TODO: 在这里实现最优步长计算
+        pass
     
     def get_complexity(self) -> dict:
         """获取算法复杂度信息"""
