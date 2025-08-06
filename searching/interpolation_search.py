@@ -173,4 +173,198 @@ class InterpolationSearch(AlgorithmBase):
         if not target:
             raise ValueError("必须提供target参数")
         
-        return self.search(data, target) 
+        return self.search(data, target)
+
+
+def main():
+    """测试InterpolationSearch类的实现"""
+    print("=" * 60)
+    print("🧪 测试插值搜索算法实现")
+    print("=" * 60)
+    
+    # 创建InterpolationSearch实例
+    interpolation_search = InterpolationSearch()
+    
+    # 测试数据（均匀分布的有序数组）
+    test_data = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29]
+    uniform_data = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    non_uniform_data = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
+    empty_data = []
+    single_element = [42]
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: 基本搜索 - 找到目标
+    print("\n🔍 测试用例1: 基本搜索 - 找到目标")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(test_data, target=15)
+        if result is not None and test_data[result] == 15:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(找到目标) - 通过")
+            print("✅ 基本搜索(找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(找到目标) - 失败")
+            print("❌ 基本搜索(找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(找到目标) - 异常: {e}")
+    
+    # 测试用例2: 基本搜索 - 未找到目标
+    print("\n🔍 测试用例2: 基本搜索 - 未找到目标")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(test_data, target=30)
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(未找到目标) - 通过")
+            print("✅ 基本搜索(未找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(未找到目标) - 失败")
+            print("❌ 基本搜索(未找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+    
+    # 测试用例3: 空数组搜索
+    print("\n🔍 测试用例3: 空数组搜索")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(empty_data, target=42)
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 空数组搜索 - 通过")
+            print("✅ 空数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 空数组搜索 - 失败")
+            print("❌ 空数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 空数组搜索 - 异常: {e}")
+        print(f"❌ 空数组搜索 - 异常: {e}")
+    
+    # 测试用例4: 单元素数组搜索
+    print("\n🔍 测试用例4: 单元素数组搜索")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(single_element, target=42)
+        if result == 0 and single_element[result] == 42:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 单元素数组搜索 - 通过")
+            print("✅ 单元素数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 单元素数组搜索 - 失败")
+            print("❌ 单元素数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 单元素数组搜索 - 异常: {e}")
+        print(f"❌ 单元素数组搜索 - 异常: {e}")
+    
+    # 测试用例5: 均匀分布数据搜索
+    print("\n🔍 测试用例5: 均匀分布数据搜索")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(uniform_data, target=50)
+        if result is not None and uniform_data[result] == 50:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 均匀分布数据搜索 - 通过")
+            print("✅ 均匀分布数据搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 均匀分布数据搜索 - 失败")
+            print("❌ 均匀分布数据搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 均匀分布数据搜索 - 异常: {e}")
+        print(f"❌ 均匀分布数据搜索 - 异常: {e}")
+    
+    # 测试用例6: 非均匀分布数据搜索
+    print("\n🔍 测试用例6: 非均匀分布数据搜索")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.execute(non_uniform_data, target=64)
+        if result is not None and non_uniform_data[result] == 64:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 非均匀分布数据搜索 - 通过")
+            print("✅ 非均匀分布数据搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 非均匀分布数据搜索 - 失败")
+            print("❌ 非均匀分布数据搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 非均匀分布数据搜索 - 异常: {e}")
+        print(f"❌ 非均匀分布数据搜索 - 异常: {e}")
+    
+    # 测试用例7: 边界值测试
+    print("\n🔍 测试用例7: 边界值测试")
+    test_results['total'] += 1
+    try:
+        # 测试第一个元素
+        first_result = interpolation_search.execute(test_data, target=1)
+        # 测试最后一个元素
+        last_result = interpolation_search.execute(test_data, target=29)
+        if first_result == 0 and last_result == len(test_data) - 1:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 边界值测试 - 通过")
+            print("✅ 边界值测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 边界值测试 - 失败")
+            print("❌ 边界值测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 边界值测试 - 异常: {e}")
+        print(f"❌ 边界值测试 - 异常: {e}")
+    
+    # 测试用例8: 带边界检查的搜索
+    print("\n🔍 测试用例8: 带边界检查的搜索")
+    test_results['total'] += 1
+    try:
+        result = interpolation_search.search_with_bounds_check(test_data, target=17)
+        if result is not None and test_data[result] == 17:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 带边界检查的搜索 - 通过")
+            print("✅ 带边界检查的搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 带边界检查的搜索 - 失败")
+            print("❌ 带边界检查的搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 带边界检查的搜索 - 异常: {e}")
+        print(f"❌ 带边界检查的搜索 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的插值搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 

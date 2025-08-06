@@ -194,4 +194,166 @@ class LinearSearch(AlgorithmBase):
         elif target:
             return self.search(data, target)
         else:
-            raise ValueError("必须提供target参数或condition参数") 
+            raise ValueError("必须提供target参数或condition参数")
+
+
+def main():
+    """测试LinearSearch类的实现"""
+    print("=" * 60)
+    print("🧪 测试线性搜索算法实现")
+    print("=" * 60)
+    
+    # 创建LinearSearch实例
+    linear_search = LinearSearch()
+    
+    # 测试数据
+    test_data = [23, 45, 12, 67, 89, 34, 56, 78, 90, 1, 45, 67, 89, 23, 45]
+    empty_data = []
+    duplicate_data = [1, 2, 2, 3, 2, 4, 5, 2]
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: 基本搜索 - 找到目标
+    print("\n🔍 测试用例1: 基本搜索 - 找到目标")
+    test_results['total'] += 1
+    try:
+        result = linear_search.execute(test_data, target=67, search_type='basic')
+        if result is not None and test_data[result] == 67:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(找到目标) - 通过")
+            print("✅ 基本搜索(找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(找到目标) - 失败")
+            print("❌ 基本搜索(找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(找到目标) - 异常: {e}")
+    
+    # 测试用例2: 基本搜索 - 未找到目标
+    print("\n🔍 测试用例2: 基本搜索 - 未找到目标")
+    test_results['total'] += 1
+    try:
+        result = linear_search.execute(test_data, target=999, search_type='basic')
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(未找到目标) - 通过")
+            print("✅ 基本搜索(未找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(未找到目标) - 失败")
+            print("❌ 基本搜索(未找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+    
+    # 测试用例3: 空数组搜索
+    print("\n🔍 测试用例3: 空数组搜索")
+    test_results['total'] += 1
+    try:
+        result = linear_search.execute(empty_data, target=42, search_type='basic')
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 空数组搜索 - 通过")
+            print("✅ 空数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 空数组搜索 - 失败")
+            print("❌ 空数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 空数组搜索 - 异常: {e}")
+        print(f"❌ 空数组搜索 - 异常: {e}")
+    
+    # 测试用例4: 条件搜索
+    print("\n🔍 测试用例4: 条件搜索")
+    test_results['total'] += 1
+    try:
+        condition = lambda x: x > 50
+        result = linear_search.execute(test_data, condition=condition, search_type='condition')
+        if result is not None and test_data[result] > 50:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 条件搜索 - 通过")
+            print("✅ 条件搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 条件搜索 - 失败")
+            print("❌ 条件搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 条件搜索 - 异常: {e}")
+        print(f"❌ 条件搜索 - 异常: {e}")
+    
+    # 测试用例5: 搜索所有出现位置
+    print("\n🔍 测试用例5: 搜索所有出现位置")
+    test_results['total'] += 1
+    try:
+        result = linear_search.execute(duplicate_data, target=2, search_type='all')
+        if isinstance(result, list) and len(result) == 4:
+            # 验证所有位置都包含目标元素
+            all_correct = all(duplicate_data[pos] == 2 for pos in result)
+            if all_correct:
+                test_results['passed'] += 1
+                test_results['details'].append("✅ 搜索所有出现位置 - 通过")
+                print("✅ 搜索所有出现位置 - 通过")
+            else:
+                test_results['failed'] += 1
+                test_results['details'].append("❌ 搜索所有出现位置 - 失败")
+                print("❌ 搜索所有出现位置 - 失败")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 搜索所有出现位置 - 失败")
+            print("❌ 搜索所有出现位置 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 搜索所有出现位置 - 异常: {e}")
+        print(f"❌ 搜索所有出现位置 - 异常: {e}")
+    
+    # 测试用例6: 哨兵搜索
+    print("\n🔍 测试用例6: 哨兵搜索")
+    test_results['total'] += 1
+    try:
+        data_copy = test_data.copy()
+        result = linear_search.execute(data_copy, target=67, search_type='sentinel')
+        if result is not None and test_data[result] == 67:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 哨兵搜索 - 通过")
+            print("✅ 哨兵搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 哨兵搜索 - 失败")
+            print("❌ 哨兵搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 哨兵搜索 - 异常: {e}")
+        print(f"❌ 哨兵搜索 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的线性搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 

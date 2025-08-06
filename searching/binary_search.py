@@ -178,4 +178,193 @@ class BinarySearch(AlgorithmBase):
         elif search_type == 'last':
             return self.search_last_occurrence(data, target)
         else:
-            return self.search(data, target) 
+            return self.search(data, target)
+
+
+def main():
+    """测试BinarySearch类的实现"""
+    print("=" * 60)
+    print("🧪 测试二分搜索算法实现")
+    print("=" * 60)
+    
+    # 创建BinarySearch实例
+    binary_search = BinarySearch()
+    
+    # 测试数据（有序数组）
+    test_data = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29]
+    duplicate_data = [1, 2, 2, 2, 3, 4, 5, 5, 5, 6, 7, 8, 9, 9, 9]
+    empty_data = []
+    single_element = [42]
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: 基本搜索 - 找到目标
+    print("\n🔍 测试用例1: 基本搜索 - 找到目标")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(test_data, target=15, search_type='basic')
+        if result is not None and test_data[result] == 15:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(找到目标) - 通过")
+            print("✅ 基本搜索(找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(找到目标) - 失败")
+            print("❌ 基本搜索(找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(找到目标) - 异常: {e}")
+    
+    # 测试用例2: 基本搜索 - 未找到目标
+    print("\n🔍 测试用例2: 基本搜索 - 未找到目标")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(test_data, target=30, search_type='basic')
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(未找到目标) - 通过")
+            print("✅ 基本搜索(未找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(未找到目标) - 失败")
+            print("❌ 基本搜索(未找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+    
+    # 测试用例3: 空数组搜索
+    print("\n🔍 测试用例3: 空数组搜索")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(empty_data, target=42, search_type='basic')
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 空数组搜索 - 通过")
+            print("✅ 空数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 空数组搜索 - 失败")
+            print("❌ 空数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 空数组搜索 - 异常: {e}")
+        print(f"❌ 空数组搜索 - 异常: {e}")
+    
+    # 测试用例4: 单元素数组搜索
+    print("\n🔍 测试用例4: 单元素数组搜索")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(single_element, target=42, search_type='basic')
+        if result == 0 and single_element[result] == 42:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 单元素数组搜索 - 通过")
+            print("✅ 单元素数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 单元素数组搜索 - 失败")
+            print("❌ 单元素数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 单元素数组搜索 - 异常: {e}")
+        print(f"❌ 单元素数组搜索 - 异常: {e}")
+    
+    # 测试用例5: 搜索第一次出现位置
+    print("\n🔍 测试用例5: 搜索第一次出现位置")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(duplicate_data, target=2, search_type='first')
+        if result is not None and duplicate_data[result] == 2:
+            # 验证这是第一次出现的位置
+            first_occurrence = duplicate_data.index(2)
+            if result == first_occurrence:
+                test_results['passed'] += 1
+                test_results['details'].append("✅ 搜索第一次出现位置 - 通过")
+                print("✅ 搜索第一次出现位置 - 通过")
+            else:
+                test_results['failed'] += 1
+                test_results['details'].append("❌ 搜索第一次出现位置 - 失败")
+                print("❌ 搜索第一次出现位置 - 失败")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 搜索第一次出现位置 - 失败")
+            print("❌ 搜索第一次出现位置 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 搜索第一次出现位置 - 异常: {e}")
+        print(f"❌ 搜索第一次出现位置 - 异常: {e}")
+    
+    # 测试用例6: 搜索最后一次出现位置
+    print("\n🔍 测试用例6: 搜索最后一次出现位置")
+    test_results['total'] += 1
+    try:
+        result = binary_search.execute(duplicate_data, target=5, search_type='last')
+        if result is not None and duplicate_data[result] == 5:
+            # 验证这是最后一次出现的位置
+            last_occurrence = len(duplicate_data) - 1 - duplicate_data[::-1].index(5)
+            if result == last_occurrence:
+                test_results['passed'] += 1
+                test_results['details'].append("✅ 搜索最后一次出现位置 - 通过")
+                print("✅ 搜索最后一次出现位置 - 通过")
+            else:
+                test_results['failed'] += 1
+                test_results['details'].append("❌ 搜索最后一次出现位置 - 失败")
+                print("❌ 搜索最后一次出现位置 - 失败")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 搜索最后一次出现位置 - 失败")
+            print("❌ 搜索最后一次出现位置 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 搜索最后一次出现位置 - 异常: {e}")
+        print(f"❌ 搜索最后一次出现位置 - 异常: {e}")
+    
+    # 测试用例7: 边界值测试
+    print("\n🔍 测试用例7: 边界值测试")
+    test_results['total'] += 1
+    try:
+        # 测试第一个元素
+        first_result = binary_search.execute(test_data, target=1, search_type='basic')
+        # 测试最后一个元素
+        last_result = binary_search.execute(test_data, target=29, search_type='basic')
+        if first_result == 0 and last_result == len(test_data) - 1:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 边界值测试 - 通过")
+            print("✅ 边界值测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 边界值测试 - 失败")
+            print("❌ 边界值测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 边界值测试 - 异常: {e}")
+        print(f"❌ 边界值测试 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的二分搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 

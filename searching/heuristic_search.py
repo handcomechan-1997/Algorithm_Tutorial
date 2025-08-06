@@ -15,6 +15,7 @@ import heapq
 from typing import Any, List, Optional, Set, Dict, Tuple, Callable
 from core.algorithm_base import AlgorithmBase, AlgorithmType
 from data_structures.graph import Graph
+import math
 
 
 class AStarSearch(AlgorithmBase):
@@ -247,3 +248,202 @@ class AStarSearch(AlgorithmBase):
         """
         # TODO: 在这里实现欧几里得距离启发式函数
         pass 
+
+
+def main():
+    """测试启发式搜索算法的实现"""
+    print("=" * 60)
+    print("🧪 测试启发式搜索算法实现")
+    print("=" * 60)
+    
+    # 创建AStarSearch实例
+    astar = AStarSearch()
+    
+    # 创建测试图
+    from data_structures.graph import Graph
+    graph = Graph()
+    
+    # 添加顶点（使用坐标表示位置）
+    vertices = [(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)]
+    for vertex in vertices:
+        graph.add_vertex(vertex)
+    
+    # 添加边（网格连接）
+    edges = [
+        ((0, 0), (1, 0), 1), ((0, 0), (0, 1), 1),
+        ((1, 0), (2, 0), 1), ((1, 0), (1, 1), 1),
+        ((2, 0), (2, 1), 1),
+        ((0, 1), (1, 1), 1), ((0, 1), (0, 2), 1),
+        ((1, 1), (2, 1), 1), ((1, 1), (1, 2), 1),
+        ((2, 1), (2, 2), 1),
+        ((0, 2), (1, 2), 1),
+        ((1, 2), (2, 2), 1)
+    ]
+    
+    for start, end, weight in edges:
+        graph.add_edge(start, end, weight)
+    
+    # 创建启发式函数（曼哈顿距离）
+    def manhattan_heuristic(pos1, pos2):
+        return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: 基本A*搜索测试
+    print("\n🔍 测试用例1: 基本A*搜索测试")
+    test_results['total'] += 1
+    try:
+        result = astar.execute(graph, start_vertex=(0, 0), target_vertex=(2, 2), heuristic=manhattan_heuristic)
+        if isinstance(result, list) and len(result) > 0 and result[0] == (0, 0) and result[-1] == (2, 2):
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本A*搜索测试 - 通过")
+            print("✅ 基本A*搜索测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本A*搜索测试 - 失败")
+            print("❌ 基本A*搜索测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本A*搜索测试 - 异常: {e}")
+        print(f"❌ 基本A*搜索测试 - 异常: {e}")
+    
+    # 测试用例2: 短路径测试
+    print("\n🔍 测试用例2: 短路径测试")
+    test_results['total'] += 1
+    try:
+        result = astar.execute(graph, start_vertex=(0, 0), target_vertex=(1, 0), heuristic=manhattan_heuristic)
+        if isinstance(result, list) and len(result) == 2 and result[0] == (0, 0) and result[1] == (1, 0):
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 短路径测试 - 通过")
+            print("✅ 短路径测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 短路径测试 - 失败")
+            print("❌ 短路径测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 短路径测试 - 异常: {e}")
+        print(f"❌ 短路径测试 - 异常: {e}")
+    
+    # 测试用例3: 对角线路径测试
+    print("\n🔍 测试用例3: 对角线路径测试")
+    test_results['total'] += 1
+    try:
+        result = astar.execute(graph, start_vertex=(0, 0), target_vertex=(1, 1), heuristic=manhattan_heuristic)
+        if isinstance(result, list) and len(result) > 0 and result[0] == (0, 0) and result[-1] == (1, 1):
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 对角线路径测试 - 通过")
+            print("✅ 对角线路径测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 对角线路径测试 - 失败")
+            print("❌ 对角线路径测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 对角线路径测试 - 异常: {e}")
+        print(f"❌ 对角线路径测试 - 异常: {e}")
+    
+    # 测试用例4: 不存在的路径测试
+    print("\n🔍 测试用例4: 不存在的路径测试")
+    test_results['total'] += 1
+    try:
+        # 添加一个孤立的顶点
+        graph.add_vertex((3, 3))
+        result = astar.execute(graph, start_vertex=(0, 0), target_vertex=(3, 3), heuristic=manhattan_heuristic)
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 不存在的路径测试 - 通过")
+            print("✅ 不存在的路径测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 不存在的路径测试 - 失败")
+            print("❌ 不存在的路径测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 不存在的路径测试 - 异常: {e}")
+        print(f"❌ 不存在的路径测试 - 异常: {e}")
+    
+    # 测试用例5: 多目标搜索测试
+    print("\n🔍 测试用例5: 多目标搜索测试")
+    test_results['total'] += 1
+    try:
+        targets = [(1, 1), (2, 2)]
+        result = astar.search_with_multiple_goals(graph, (0, 0), targets, manhattan_heuristic)
+        if isinstance(result, dict) and len(result) == 2:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 多目标搜索测试 - 通过")
+            print("✅ 多目标搜索测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 多目标搜索测试 - 失败")
+            print("❌ 多目标搜索测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 多目标搜索测试 - 异常: {e}")
+        print(f"❌ 多目标搜索测试 - 异常: {e}")
+    
+    # 测试用例6: 曼哈顿距离启发式函数测试
+    print("\n🔍 测试用例6: 曼哈顿距离启发式函数测试")
+    test_results['total'] += 1
+    try:
+        heuristic_func = astar.create_manhattan_heuristic()
+        distance = heuristic_func((0, 0), (2, 2))
+        if distance == 4:  # 曼哈顿距离应该是4
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 曼哈顿距离启发式函数测试 - 通过")
+            print("✅ 曼哈顿距离启发式函数测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 曼哈顿距离启发式函数测试 - 失败")
+            print("❌ 曼哈顿距离启发式函数测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 曼哈顿距离启发式函数测试 - 异常: {e}")
+        print(f"❌ 曼哈顿距离启发式函数测试 - 异常: {e}")
+    
+    # 测试用例7: 欧几里得距离启发式函数测试
+    print("\n🔍 测试用例7: 欧几里得距离启发式函数测试")
+    test_results['total'] += 1
+    try:
+        heuristic_func = astar.create_euclidean_heuristic()
+        distance = heuristic_func((0, 0), (3, 4))
+        if abs(distance - 5.0) < 0.001:  # 欧几里得距离应该是5
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 欧几里得距离启发式函数测试 - 通过")
+            print("✅ 欧几里得距离启发式函数测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 欧几里得距离启发式函数测试 - 失败")
+            print("❌ 欧几里得距离启发式函数测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 欧几里得距离启发式函数测试 - 异常: {e}")
+        print(f"❌ 欧几里得距离启发式函数测试 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的启发式搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Algorithm Tutorial - 算法学习平台主程序入口
 """

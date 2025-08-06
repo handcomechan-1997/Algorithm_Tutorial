@@ -295,3 +295,196 @@ class BreadthFirstSearch(AlgorithmBase):
             return self.find_shortest_path(data, start_vertex, target_vertex)
         else:
             return self.search(data, start_vertex, target_vertex) 
+
+
+def main():
+    """测试图搜索算法的实现"""
+    print("=" * 60)
+    print("🧪 测试图搜索算法实现")
+    print("=" * 60)
+    
+    # 创建图搜索实例
+    dfs = DepthFirstSearch()
+    bfs = BreadthFirstSearch()
+    
+    # 创建测试图
+    from data_structures.graph import Graph
+    graph = Graph()
+    
+    # 添加顶点
+    vertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+    for vertex in vertices:
+        graph.add_vertex(vertex)
+    
+    # 添加边
+    edges = [
+        ('A', 'B', 1), ('A', 'C', 2),
+        ('B', 'D', 3), ('B', 'E', 4),
+        ('C', 'F', 5), ('C', 'G', 6),
+        ('D', 'H', 7), ('E', 'H', 8),
+        ('F', 'H', 9), ('G', 'H', 10)
+    ]
+    
+    for start, end, weight in edges:
+        graph.add_edge(start, end, weight)
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: DFS遍历测试
+    print("\n🔍 测试用例1: DFS遍历测试")
+    test_results['total'] += 1
+    try:
+        result = dfs.execute(graph, start_vertex='A', search_type='traversal')
+        if isinstance(result, list) and len(result) > 0 and 'A' in result:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ DFS遍历测试 - 通过")
+            print("✅ DFS遍历测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ DFS遍历测试 - 失败")
+            print("❌ DFS遍历测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ DFS遍历测试 - 异常: {e}")
+        print(f"❌ DFS遍历测试 - 异常: {e}")
+    
+    # 测试用例2: BFS遍历测试
+    print("\n🔍 测试用例2: BFS遍历测试")
+    test_results['total'] += 1
+    try:
+        result = bfs.execute(graph, start_vertex='A', search_type='traversal')
+        if isinstance(result, list) and len(result) > 0 and 'A' in result:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ BFS遍历测试 - 通过")
+            print("✅ BFS遍历测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ BFS遍历测试 - 失败")
+            print("❌ BFS遍历测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ BFS遍历测试 - 异常: {e}")
+        print(f"❌ BFS遍历测试 - 异常: {e}")
+    
+    # 测试用例3: DFS路径查找测试
+    print("\n🔍 测试用例3: DFS路径查找测试")
+    test_results['total'] += 1
+    try:
+        result = dfs.execute(graph, start_vertex='A', target_vertex='H', search_type='path')
+        if isinstance(result, list) and len(result) > 0 and result[0] == 'A' and result[-1] == 'H':
+            test_results['passed'] += 1
+            test_results['details'].append("✅ DFS路径查找测试 - 通过")
+            print("✅ DFS路径查找测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ DFS路径查找测试 - 失败")
+            print("❌ DFS路径查找测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ DFS路径查找测试 - 异常: {e}")
+        print(f"❌ DFS路径查找测试 - 异常: {e}")
+    
+    # 测试用例4: BFS最短路径查找测试
+    print("\n🔍 测试用例4: BFS最短路径查找测试")
+    test_results['total'] += 1
+    try:
+        result = bfs.execute(graph, start_vertex='A', target_vertex='H', search_type='shortest_path')
+        if isinstance(result, list) and len(result) > 0 and result[0] == 'A' and result[-1] == 'H':
+            test_results['passed'] += 1
+            test_results['details'].append("✅ BFS最短路径查找测试 - 通过")
+            print("✅ BFS最短路径查找测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ BFS最短路径查找测试 - 失败")
+            print("❌ BFS最短路径查找测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ BFS最短路径查找测试 - 异常: {e}")
+        print(f"❌ BFS最短路径查找测试 - 异常: {e}")
+    
+    # 测试用例5: 不存在的路径测试
+    print("\n🔍 测试用例5: 不存在的路径测试")
+    test_results['total'] += 1
+    try:
+        # 添加一个孤立的顶点
+        graph.add_vertex('Z')
+        result = dfs.execute(graph, start_vertex='A', target_vertex='Z', search_type='path')
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 不存在的路径测试 - 通过")
+            print("✅ 不存在的路径测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 不存在的路径测试 - 失败")
+            print("❌ 不存在的路径测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 不存在的路径测试 - 异常: {e}")
+        print(f"❌ 不存在的路径测试 - 异常: {e}")
+    
+    # 测试用例6: 自环测试
+    print("\n🔍 测试用例6: 自环测试")
+    test_results['total'] += 1
+    try:
+        # 添加自环
+        graph.add_edge('A', 'A', 0)
+        result = dfs.execute(graph, start_vertex='A', search_type='traversal')
+        if isinstance(result, list) and 'A' in result:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 自环测试 - 通过")
+            print("✅ 自环测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 自环测试 - 失败")
+            print("❌ 自环测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 自环测试 - 异常: {e}")
+        print(f"❌ 自环测试 - 异常: {e}")
+    
+    # 测试用例7: 性能统计测试
+    print("\n🔍 测试用例7: 性能统计测试")
+    test_results['total'] += 1
+    try:
+        dfs.reset_stats()
+        dfs.execute(graph, start_vertex='A', search_type='traversal')
+        if dfs.operation_count > 0:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 性能统计测试 - 通过")
+            print("✅ 性能统计测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 性能统计测试 - 失败")
+            print("❌ 性能统计测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 性能统计测试 - 异常: {e}")
+        print(f"❌ 性能统计测试 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的图搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 

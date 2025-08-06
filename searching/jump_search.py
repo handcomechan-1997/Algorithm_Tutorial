@@ -166,4 +166,179 @@ class JumpSearch(AlgorithmBase):
         if not target:
             raise ValueError("必须提供target参数")
         
-        return self.search(data, target) 
+        return self.search(data, target)
+
+
+def main():
+    """测试JumpSearch类的实现"""
+    print("=" * 60)
+    print("🧪 测试跳跃搜索算法实现")
+    print("=" * 60)
+    
+    # 创建JumpSearch实例
+    jump_search = JumpSearch()
+    
+    # 测试数据（有序数组）
+    test_data = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39]
+    small_data = [1, 3, 5, 7, 9]
+    empty_data = []
+    single_element = [42]
+    
+    test_results = {
+        'passed': 0,
+        'failed': 0,
+        'total': 0,
+        'details': []
+    }
+    
+    # 测试用例1: 基本搜索 - 找到目标
+    print("\n🔍 测试用例1: 基本搜索 - 找到目标")
+    test_results['total'] += 1
+    try:
+        result = jump_search.execute(test_data, target=15)
+        if result is not None and test_data[result] == 15:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(找到目标) - 通过")
+            print("✅ 基本搜索(找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(找到目标) - 失败")
+            print("❌ 基本搜索(找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(找到目标) - 异常: {e}")
+    
+    # 测试用例2: 基本搜索 - 未找到目标
+    print("\n🔍 测试用例2: 基本搜索 - 未找到目标")
+    test_results['total'] += 1
+    try:
+        result = jump_search.execute(test_data, target=40)
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 基本搜索(未找到目标) - 通过")
+            print("✅ 基本搜索(未找到目标) - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 基本搜索(未找到目标) - 失败")
+            print("❌ 基本搜索(未找到目标) - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+        print(f"❌ 基本搜索(未找到目标) - 异常: {e}")
+    
+    # 测试用例3: 空数组搜索
+    print("\n🔍 测试用例3: 空数组搜索")
+    test_results['total'] += 1
+    try:
+        result = jump_search.execute(empty_data, target=42)
+        if result is None:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 空数组搜索 - 通过")
+            print("✅ 空数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 空数组搜索 - 失败")
+            print("❌ 空数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 空数组搜索 - 异常: {e}")
+        print(f"❌ 空数组搜索 - 异常: {e}")
+    
+    # 测试用例4: 单元素数组搜索
+    print("\n🔍 测试用例4: 单元素数组搜索")
+    test_results['total'] += 1
+    try:
+        result = jump_search.execute(single_element, target=42)
+        if result == 0 and single_element[result] == 42:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 单元素数组搜索 - 通过")
+            print("✅ 单元素数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 单元素数组搜索 - 失败")
+            print("❌ 单元素数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 单元素数组搜索 - 异常: {e}")
+        print(f"❌ 单元素数组搜索 - 异常: {e}")
+    
+    # 测试用例5: 小数组搜索
+    print("\n🔍 测试用例5: 小数组搜索")
+    test_results['total'] += 1
+    try:
+        result = jump_search.execute(small_data, target=7)
+        if result is not None and small_data[result] == 7:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 小数组搜索 - 通过")
+            print("✅ 小数组搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 小数组搜索 - 失败")
+            print("❌ 小数组搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 小数组搜索 - 异常: {e}")
+        print(f"❌ 小数组搜索 - 异常: {e}")
+    
+    # 测试用例6: 边界值测试
+    print("\n🔍 测试用例6: 边界值测试")
+    test_results['total'] += 1
+    try:
+        # 测试第一个元素
+        first_result = jump_search.execute(test_data, target=1)
+        # 测试最后一个元素
+        last_result = jump_search.execute(test_data, target=39)
+        if first_result == 0 and last_result == len(test_data) - 1:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 边界值测试 - 通过")
+            print("✅ 边界值测试 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 边界值测试 - 失败")
+            print("❌ 边界值测试 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 边界值测试 - 异常: {e}")
+        print(f"❌ 边界值测试 - 异常: {e}")
+    
+    # 测试用例7: 自定义步长搜索
+    print("\n🔍 测试用例7: 自定义步长搜索")
+    test_results['total'] += 1
+    try:
+        result = jump_search.search_with_custom_step(test_data, target=25, step_size=3)
+        if result is not None and test_data[result] == 25:
+            test_results['passed'] += 1
+            test_results['details'].append("✅ 自定义步长搜索 - 通过")
+            print("✅ 自定义步长搜索 - 通过")
+        else:
+            test_results['failed'] += 1
+            test_results['details'].append("❌ 自定义步长搜索 - 失败")
+            print("❌ 自定义步长搜索 - 失败")
+    except Exception as e:
+        test_results['failed'] += 1
+        test_results['details'].append(f"❌ 自定义步长搜索 - 异常: {e}")
+        print(f"❌ 自定义步长搜索 - 异常: {e}")
+    
+    # 输出测试总结
+    print("\n" + "=" * 60)
+    print("📊 测试结果总结")
+    print("=" * 60)
+    print(f"总测试数: {test_results['total']}")
+    print(f"通过测试: {test_results['passed']}")
+    print(f"失败测试: {test_results['failed']}")
+    
+    if test_results['failed'] == 0:
+        print("\n🎉 所有测试通过！你的跳跃搜索实现是正确的！")
+    else:
+        print(f"\n⚠️  有 {test_results['failed']} 个测试失败，请检查你的实现。")
+        print("\n失败的测试详情:")
+        for detail in test_results['details']:
+            if detail.startswith("❌"):
+                print(f"  {detail}")
+    
+    return test_results['failed'] == 0
+
+
+if __name__ == "__main__":
+    main() 
