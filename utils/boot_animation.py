@@ -6,29 +6,40 @@ class BootAnimation:
     """启动动画类"""
     
     def __init__(self):
-        """初始化启动动画"""
-        # --- 已修正的 LOGO ---
-        self.logo = """
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║    █████  ██      ███████ ███████ ██████  ███████ ███████     ║
-║   ██   ██ ██      ██      ██   ██ ██   ██    ██     ██        ║
-║   ███████ ██      ██  ███ ██   ██ ██████     ██     ██        ║
-║   ██   ██ ██      ██   ██ ██   ██ ██  ██     ██     ██        ║
-║   ██   ██ ███████ ███████ ███████ ██   ██ ███████   ██        ║
-║                                                              ║
-║   ██   ██ ███    ███                                          ║
-║   ██   ██ ████  ████                                          ║
-║   ██   ██ ██ ████ ██                                          ║
-║   ██   ██ ██  ██  ██                                          ║
-║   ██   ██ ██      ██                                          ║
-║                                                              ║
-║              Algorithm Learning Platform                     ║
-║                                                              ║
-║  Version 1.0.0 - Educational Project                        ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-        """
+        """初始化启动动画（ALGORITHM 大字 + 居中）"""
+        # 内框宽度（你原来的边框里是 62 个字符）
+        inner_w = 62
+
+        # 5×5 等宽字库（全角方块风格）
+        font = {
+            'A': [" ███ ", "█   █", "█████", "█   █", "█   █"],
+            'L': ["█    ", "█    ", "█    ", "█    ", "█████"],
+            'G': [" ███ ", "█    ", "█ ███", "█   █", " ████"],
+            'O': [" ███ ", "█   █", "█   █", "█   █", " ███ "],
+            'R': ["████ ", "█  █ ", "████ ", "█ █  ", "█  █ "],
+            'I': ["█████", "  █  ", "  █  ", "  █  ", "█████"],
+            'T': ["█████", "  █  ", "  █  ", "  █  ", "  █  "],
+            'H': ["█   █", "█   █", "█████", "█   █", "█   █"],
+            'M': ["█   █", "██ ██", "█ █ █", "█   █", "█   █"],
+        }
+
+        word = "ALGORITHM"
+        rows = [" ".join(font[ch][r] for ch in word) for r in range(5)]
+
+        top =    "╔" + "═" * inner_w + "╗"
+        blank =  "║" + " " * inner_w + "║"
+        body =   "\n".join("║" + row.center(inner_w) + "║" for row in rows)
+        footer = [
+            blank,
+            "║" + "Algorithm Learning Platform".center(inner_w) + "║",
+            blank,
+            "║" + "Version 1.0.0 - Educational Project".center(inner_w) + "║",
+            blank,
+        ]
+        bottom = "╚" + "═" * inner_w + "╝"
+
+        self.logo = "\n".join([top, blank, body, *footer, bottom])
+
     
     def show_boot_screen(self):
         """显示启动画面"""
@@ -62,8 +73,8 @@ def show_startup_sequence():
     """显示启动序列"""
     animation = BootAnimation()
     
-    # 首先显示启动画面
-    animation.show_boot_screen()
+    # # 首先显示启动画面
+    # animation.show_boot_screen()
 
     # 显示各个组件的初始化进度
     components = [
